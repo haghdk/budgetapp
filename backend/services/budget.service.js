@@ -9,6 +9,14 @@ class BudgetService {
         })
         return budget
     }
+
+    async allBudgets() {
+        const budgets = await Budget.findAll()
+        if (budgets === null) {
+            return null
+        }
+        return budgets
+    }
 }
 
 module.exports = new BudgetService()
