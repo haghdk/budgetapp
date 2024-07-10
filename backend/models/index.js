@@ -1,9 +1,9 @@
 const Sequelize = require('sequelize')
-const sequelize = require('../config/database')
+const sequelizeConfig = require('../config/database')
 
-const Budget = require('./budget.model')(sequelize, Sequelize)
-const Spending = require('./spending.model')(sequelize, Sequelize)
-const Category = require('./category.model')(sequelize, Sequelize)
+const Budget = require('./budget.model')(sequelizeConfig, Sequelize)
+const Spending = require('./spending.model')(sequelizeConfig, Sequelize)
+const Category = require('./category.model')(sequelizeConfig, Sequelize)
 
 Budget.hasMany(Spending, { foreignKey: 'budgetId' })
 Spending.belongsTo(Budget, { foreignKey: 'budgetId' })
@@ -11,7 +11,7 @@ Spending.belongsTo(Budget, { foreignKey: 'budgetId' })
 Category.hasMany(Spending, { foreignKey: 'categoryId' })
 Spending.belongsTo(Category, { foreignKey: 'categoryId' })
 
-sequelize.sync()
+sequelizeConfig.sync()
 
 module.exports = {
     Budget,
