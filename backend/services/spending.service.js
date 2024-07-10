@@ -1,4 +1,4 @@
-const { Spending, Budget, Category } = require('../models')
+const { Spending, Budget, Category } = require('../models')
 
 class SpendingService {
     async addSpending(description, amount, type, budgetId, categoryId) {
@@ -18,7 +18,7 @@ class SpendingService {
             amount,
             type,
             budgetId,
-            categoryService
+            categoryId
         })
         
         return spending
