@@ -17,5 +17,5 @@ module.exports = {
     Budget,
     Spending,
     Category,
-    sequelize
+    sequelizeConfig
 }
