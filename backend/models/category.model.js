@@ -1,15 +1,3 @@
-// models/Category.js
-
-/**
- * @typedef {import('sequelize').Model} Model
- * @typedef {import('sequelize').DataTypes} DataTypes
- */
-
-/**
- * @param {import('sequelize').Sequelize} sequelize
- * @param {DataTypes} DataTypes
- * @returns {Model}
- */
 const CategoryModel = (sequelize, DataTypes) => {
     const Category = sequelize.define('Category', {
         id: {
