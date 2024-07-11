@@ -4,9 +4,9 @@ const { NotFoundError, BadRequestError } = require('../errors/errors')
 
 class BudgetController {
     async addBudget(req, res) {
-        const { amount, startDate, endDate } = req.body
+        const { title, amount, startDate, endDate } = req.body
         try {
-            const budget = await BudgetService.addBudget(amount, startDate, endDate)
+            const budget = await BudgetService.addBudget(title, amount, startDate, endDate)
             res.json(budget)
         } catch (err) {
             const statusCode = err.statusCode != null ? err.statusCode : 500

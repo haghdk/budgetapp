@@ -5,8 +5,13 @@ const BudgetModel = (sequelize, DataTypes) => {
             autoIncrement: true,
             primaryKey: true
         },
+        title: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            defaultValue: 'null'
+        },
         amount: {
-            type: DataTypes.FLOAT,
+            type: DataTypes.INTEGER,
             allowNull: false
         },
         startDate: {

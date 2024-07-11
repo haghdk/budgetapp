@@ -11,7 +11,7 @@ Spending.belongsTo(Budget, { foreignKey: 'budgetId' })
 Category.hasMany(Spending, { foreignKey: 'categoryId' })
 Spending.belongsTo(Category, { foreignKey: 'categoryId' })
 
-sequelizeConfig.sync()
+sequelizeConfig.sync({ alter: true })
 
 module.exports = {
     Budget,
