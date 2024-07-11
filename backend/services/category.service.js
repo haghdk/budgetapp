@@ -1,10 +1,4 @@
-// services/CategoryService.js
-
 const { Category } = require('../models')
-
-/**
- * @typedef {import('../models').Category} Category
- */
 
 class CategoryService {
     async addCategory(name, color) {
@@ -18,9 +12,25 @@ class CategoryService {
     async listAllCategories() {
         const categories = await Category.findAll()
         if (categories === null) {
-            return null
+            throw new Error('No categories found')
         } 
         return categories
+    }
+
+    async editCategory(name, color, categoryId) {
+        const category = await Category.findByPk(categoryId)
+        if (!category) {
+            throw new Error(`Category with id ${categoryId} not found`)
+        }
+
+        const updatedCategory = category.update({
+            name,
+            color
+        }, 
+        {
+            where: { id: categoryId }
+        })
+        return updatedCategory
     }
 }
 
