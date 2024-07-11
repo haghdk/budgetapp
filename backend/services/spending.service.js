@@ -1,6 +1,6 @@
 const { Spending, Budget, Category } = require('../models')
 const { typeConstants } = require('../constants/types')
-const NotFoundError = require('../errors/errors.notfound')
+const { NotFoundError } = require('../errors/errors')
 
 class SpendingService {
     /**
@@ -25,7 +25,7 @@ class SpendingService {
         }
 
         if (!category) {
-            throw new Error(`Category with id ${categoryId} not found`)
+            throw new NotFoundError(`Category with id ${categoryId} not found`)
         }
         
         const spending = Spending.create({
@@ -47,7 +47,7 @@ class SpendingService {
         const budget = await Budget.findByPk(budgetId)
 
         if (!budget) {
-            throw new Error(`Budget with id ${budgetId} not found`)
+            throw new NotFoundError(`Budget with id ${budgetId} not found`)
         }
 
         const spendings = await Spending.findAll({
@@ -64,7 +64,7 @@ class SpendingService {
     async getSpendingById(spendingId) {
         const spending = await Spending.findByPk(spendingId)
         if (!spending) {
-            throw new Error(`Spending with id ${spendingId} not found`)
+            throw new NotFoundError(`Spending with id ${spendingId} not found`)
         }
         return spending
     }
@@ -80,7 +80,7 @@ class SpendingService {
     async editSpending(description, amount, type, spendingId, categoryId) {
         const spending = await Spending.findByPk(spendingId)
         if (!spending) {
-            throw new Error(`Spending with id ${spendingId} not found`)
+            throw new NotFoundError(`Spending with id ${spendingId} not found`)
         }
 
         if (!Object.values(typeConstants).includes(type)) {

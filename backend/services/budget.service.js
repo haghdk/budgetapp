@@ -1,11 +1,11 @@
 const { Budget } = require('../models')
-const NotFoundError = require('../errors/errors.notfound')
+const { NotFoundError, BadRequestError } = require('../errors/errors')
 
 class BudgetService {
     async addBudget(amount, startDate, endDate) {
         
         if (!isNaN(amount) && amount.toString().indexOf('.') != -1) {
-            throw new Error('Amount must be a number in float format')
+            throw new BadRequestError('Amount must be a number in float format')
         }
         
         const budget = await Budget.create({
