@@ -1,4 +1,5 @@
 const SpendingService = require('../services/spending.service')
+const { NotFoundError, BadRequestError } = require('../errors/errors')
 
 class SpendingController {
     async addSpending(req, res) {

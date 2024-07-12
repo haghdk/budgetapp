@@ -8,9 +8,9 @@ class BudgetController {
         try {
             const budget = await BudgetService.addBudget(title, amount, startDate, endDate)
             res.json(budget)
-        } catch (err) {
-            const statusCode = err.statusCode != null ? err.statusCode : 500
-            res.status(statusCode).json({ error: err.message })         
+        } catch (error) {
+            const statusCode = error.statusCode != null ? error.statusCode : 500
+            res.status(statusCode).json({ error: error.message })         
         }
     }
 
@@ -19,9 +19,9 @@ class BudgetController {
         try {
             const budget = await BudgetService.getBudgetById(budgetId)
             res.json(budget)
-        } catch (err) {
-            const statusCode = err.statusCode != null ? err.statusCode : 500
-            res.status(statusCode).json({ error: err.message })
+        } catch (error) {
+            const statusCode = error.statusCode != null ? error.statusCode : 500
+            res.status(statusCode).json({ error: error.message })
         }
     }
 
@@ -29,8 +29,8 @@ class BudgetController {
         try {
             const budgets = await BudgetService.allBudgets()
             res.json(budgets)
-        } catch (err) {
-            res.status(500).json({ error: err.message })
+        } catch (error) {
+            res.status(500).json({ error: error.message })
         }
     }
 }

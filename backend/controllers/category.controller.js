@@ -1,4 +1,5 @@
 const CategoryService = require('../services/category.service')
+const { NotFoundError, BadRequestError } = require('../errors/errors')
 
 class CategoryController {
     async addCategory(req, res) {
