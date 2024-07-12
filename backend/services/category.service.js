@@ -11,7 +11,7 @@ class CategoryService {
     }
 
     async listAllCategories() {
-        const categories = await Category.findAll()
+        const categories = await Category.findAll({attributes: ['id', 'name', 'color']})
         if (categories === null) {
             throw new Error('Error finding categories')
         } 
