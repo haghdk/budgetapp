@@ -1,15 +1,14 @@
 const SpendingService = require('../services/spending.service')
-const { NotFoundError, BadRequestError } = require('../errors/errors')
+const StatusCode = require('../utils/util.statuscode')
 
 class SpendingController {
     async addSpending(req, res) {
-        const { description, amount, type, budgetId, categoryId } = req.body
+        const { description, amount, type, date, budgetId, categoryId } = req.body
         try {
-            const spending = await SpendingService.addSpending(description, amount, type, budgetId, categoryId)
+            const spending = await SpendingService.addSpending(description, amount, type, date, budgetId, categoryId)
             res.json(spending)
         } catch (error) {
-            const statusCode = error.statusCode != null ? error.statusCode : 500
-            res.status(statusCode).json({ error: error.message })   
+            res.status(StatusCode.statusCodeFromErrorType(error)).json({ error: error.message })   
         }
     }
 
@@ -19,8 +18,7 @@ class SpendingController {
             const spendings = await SpendingService.listSpendingsInBudget(budgetId)
             res.json(spendings)
         } catch (error) {
-            const statusCode = error.statusCode != null ? error.statusCode : 500
-            res.status(statusCode).json({ error: error.message })   
+            res.status(StatusCode.statusCodeFromErrorType(error)).json({ error: error.message })
         }
     }
 
@@ -30,8 +28,7 @@ class SpendingController {
             const spendingItem = await SpendingService.getSpendingById(spendingId)
             res.json(spendingItem)
         } catch (error) {
-            const statusCode = error.statusCode != null ? error.statusCode : 500
-            res.status(statusCode).json({ error: error.message })  
+            res.status(StatusCode.statusCodeFromErrorType(error)).json({ error: error.message })
         }
     }
 
@@ -41,8 +38,17 @@ class SpendingController {
             const spending = await SpendingService.editSpending(description, amount, type, spendingId, categoryId)
             res.json(spending)
         } catch (error) {
-            const statusCode = error.statusCode != null ? error.statusCode : 500
-            res.status(statusCode).json({ error: error.message })  
+            res.status(StatusCode.statusCodeFromErrorType(error)).json({ error: error.message })
+        }
+    }
+
+    async totalSpending(req, res) {
+        const { budgetId } = req.params
+        try {
+            const totalAmount = await SpendingService.totalSpending(budgetId)
+            res.json(totalAmount)
+        } catch (error) {
+            res.status(StatusCode.statusCodeFromErrorType(error)).json({ error: error.message })
         }
     }
 }

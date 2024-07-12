@@ -1,5 +1,5 @@
 const CategoryService = require('../services/category.service')
-const { NotFoundError, BadRequestError } = require('../errors/errors')
+const StatusCode = require('../utils/util.statuscode')
 
 class CategoryController {
     async addCategory(req, res) {
@@ -8,8 +8,7 @@ class CategoryController {
             const category = await CategoryService.addCategory(name, color)
             res.json(category)
         } catch (error) {
-            const statusCode = error.statusCode != null ? error.statusCode : 500
-            res.status(statusCode).json({ error: error.message }) 
+            res.status(StatusCode.statusCodeFromErrorType(error)).json({ error: error.message })
         }
     }
 
@@ -19,8 +18,15 @@ class CategoryController {
             const category = await CategoryService.editCategory(name, color, categoryId)
             res.json(category)
         } catch (error) {
-            const statusCode = error.statusCode != null ? error.statusCode : 500
-            res.status(statusCode).json({ error: error.message }) 
+            res.status(StatusCode.statusCodeFromErrorType(error)).json({ error: error.message })
+        }
+    }
+
+    async deleteCategory(req, res) {
+        try {
+            
+        } catch(error) {
+            res.status(StatusCode.statusCodeFromErrorType(error)).json({ error: error.message }) 
         }
     }
     
@@ -29,10 +35,9 @@ class CategoryController {
             const categories = await CategoryService.listAllCategories()
             res.json(categories)
         } catch (error) {
-            const statusCode = error.statusCode != null ? error.statusCode : 500
-            res.status(statusCode).json({ error: error.message }) 
+            res.status(StatusCode.statusCodeFromErrorType(error)).json({ error: error.message }) 
         }
-    }    
+    }
 }
 
 module.exports = new CategoryController()
