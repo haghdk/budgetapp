@@ -1,6 +1,7 @@
 const { Spending, Budget, Category } = require('../models')
-const { typeConstants } = require('../constants/types')
-const { NotFoundError, BadRequestError } = require('../errors/errors')
+const { typeConstants, formatValidTypesString } = require('../constants/types')
+const { NotFoundError, BadRequestError } = require('../errors/errors');
+const sequelize = require('../config/database');
 
 class SpendingService {
     /**
@@ -12,11 +13,16 @@ class SpendingService {
      * @param {*} categoryId 
      * @returns {Promise<Spending>}
      */
-    async addSpending(description, amount, type, budgetId, categoryId) {
+    async addSpending(description, amount, type, date, budgetId, categoryId) {
         if (!Object.values(typeConstants).includes(type)) {
-            throw new Error('Invalid type. Must be either "necessary" or "luxury"')
+            const validTypesString = formatValidTypesString(Object.values(typeConstants));
+            throw new BadRequestError(`Invalid type. Must be either ${validTypesString}`);
         }
-        
+
+        if (isNaN(amount) && amount.toString().indexOf('.') === -1) {
+            throw new BadRequestError(`Amount must be a number in float format. You send "${typeof amount}"`)
+        }
+
         const budget = await Budget.findByPk(budgetId)
         const category = await Category.findByPk(categoryId)
 
@@ -32,6 +38,7 @@ class SpendingService {
             description,
             amount,
             type,
+            date,
             budgetId,
             categoryId
         })
@@ -43,14 +50,14 @@ class SpendingService {
      * Returns all spendings in a budget'
      * @param {number} budgetId
      **/
-    async listSpendingsInBudget(budgetId) {
+    async listSpendingsInBudget(budgetId) {        
         const budget = await Budget.findByPk(budgetId)
 
         if (!budget) {
             throw new NotFoundError(`Budget with id ${budgetId} not found`)
         }
 
-        const spendings = await Spending.findAll({
+        const spendings = await Spending.findAndCountAll({
             where: { budgetId }
         })
 
@@ -83,10 +90,16 @@ class SpendingService {
             throw new NotFoundError(`Spending with id ${spendingId} not found`)
         }
 
-        if (!Object.values(typeConstants).includes(type)) {
-            throw new BadRequestError('Invalid type. Must be either "necessary" or "luxury"')
+        if (isNaN(amount) && amount.toString().indexOf('.') === -1) {
+            throw new BadRequestError(`Amount must be a number in float format. You send "${typeof amount}"`)
         }
 
+        if (!Object.values(typeConstants).includes(type)) {
+            const validTypesString = formatValidTypesString(Object.values(typeConstants));
+            throw new BadRequestError(`Invalid type. Must be either ${validTypesString}`);
+        }
+
+        
         const updatedSpending = await spending.update({
             description,
             amount,
@@ -98,6 +111,27 @@ class SpendingService {
         })
 
         return updatedSpending
+    }
+
+    async totalSpending(budgetId) {
+        const budget = await Budget.findByPk(budgetId)
+
+        if (!budget) {
+            throw new NotFoundError(`Budget with id ${budgetId} not found`)
+        }
+
+        const totalSum = await Spending.findAll({
+            where: {
+                budgetId
+            },
+            attributes: [
+                'budgetId',
+                [sequelize.fn('sum', sequelize.col('amount')), 'total_amount']
+            ],
+            group: ['budgetId']            
+        })
+
+        return totalSum
     }
 }
 
