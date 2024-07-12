@@ -1,6 +1,6 @@
 const { Spending, Budget, Category } = require('../models')
 const { typeConstants } = require('../constants/types')
-const { NotFoundError } = require('../errors/errors')
+const { NotFoundError, BadRequestError } = require('../errors/errors')
 
 class SpendingService {
     /**
@@ -71,10 +71,10 @@ class SpendingService {
 
     /**
      * Edits a single spending item
-     * @param {*} description | Description of the spending
-     * @param {*} amount | Amount of the spending
-     * @param {*} type | Type of the spending
-     * @param {*} spendingId  | Id of the spending
+     * @param {*} description Description of the spending
+     * @param {*} amount Amount of the spending
+     * @param {*} type Type of the spending
+     * @param {*} spendingId Id of the spending
      * @returns 
      */
     async editSpending(description, amount, type, spendingId, categoryId) {
@@ -84,7 +84,7 @@ class SpendingService {
         }
 
         if (!Object.values(typeConstants).includes(type)) {
-            throw new Error('Invalid type. Must be either "necessary" or "luxury"')
+            throw new BadRequestError('Invalid type. Must be either "necessary" or "luxury"')
         }
 
         const updatedSpending = await spending.update({

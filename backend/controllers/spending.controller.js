@@ -7,7 +7,8 @@ class SpendingController {
             const spending = await SpendingService.addSpending(description, amount, type, budgetId, categoryId)
             res.json(spending)
         } catch (error) {
-            res.status(500).json({ error: error.message })
+            const statusCode = error.statusCode != null ? error.statusCode : 500
+            res.status(statusCode).json({ error: error.message })   
         }
     }
 
@@ -17,7 +18,8 @@ class SpendingController {
             const spendings = await SpendingService.listSpendingsInBudget(budgetId)
             res.json(spendings)
         } catch (error) {
-            res.status(500).json({ error: error.message })
+            const statusCode = error.statusCode != null ? error.statusCode : 500
+            res.status(statusCode).json({ error: error.message })   
         }
     }
 
@@ -27,7 +29,8 @@ class SpendingController {
             const spendingItem = await SpendingService.getSpendingById(spendingId)
             res.json(spendingItem)
         } catch (error) {
-            res.status(500).json({ error: error.message })
+            const statusCode = error.statusCode != null ? error.statusCode : 500
+            res.status(statusCode).json({ error: error.message })  
         }
     }
 
@@ -37,7 +40,8 @@ class SpendingController {
             const spending = await SpendingService.editSpending(description, amount, type, spendingId, categoryId)
             res.json(spending)
         } catch (error) {
-            res.status(500).json({ error: error.message })
+            const statusCode = error.statusCode != null ? error.statusCode : 500
+            res.status(statusCode).json({ error: error.message })  
         }
     }
 }

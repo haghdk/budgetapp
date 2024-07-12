@@ -7,7 +7,8 @@ class CategoryController {
             const category = await CategoryService.addCategory(name, color)
             res.json(category)
         } catch (error) {
-            res.status(500).json({ error: error.message })
+            const statusCode = error.statusCode != null ? error.statusCode : 500
+            res.status(statusCode).json({ error: error.message }) 
         }
     }
 
@@ -17,7 +18,8 @@ class CategoryController {
             const category = await CategoryService.editCategory(name, color, categoryId)
             res.json(category)
         } catch (error) {
-            res.status(500).json({ error: error.message })
+            const statusCode = error.statusCode != null ? error.statusCode : 500
+            res.status(statusCode).json({ error: error.message }) 
         }
     }
     
@@ -26,7 +28,8 @@ class CategoryController {
             const categories = await CategoryService.listAllCategories()
             res.json(categories)
         } catch (error) {
-            res.status(500).json({ error: error.message })
+            const statusCode = error.statusCode != null ? error.statusCode : 500
+            res.status(statusCode).json({ error: error.message }) 
         }
     }    
 }

@@ -37,15 +37,15 @@ class BudgetService {
     async editBudget(budgetId, amount, startDate, endDate) {
         const budget = await Budget.findByPk(budgetId)
         if (!budget) {
-            throw new Error(`Budget with id ${budgetId} not found`)
+            throw new NotFoundError(`Budget with id ${budgetId} not found`)
         }
 
-        if (!isNaN(amount) && amount.toString().indexOf('.') != -1) {
-            throw new Error('Amount must be a number in float format')
+        if (isNaN(amount) && amount.toString().indexOf('.') === -1) {
+            throw new BadRequestError(`Amount must be a number in float format. You send "${typeof amount}"`)
         }
 
         if (amount < 0) {
-            throw new Error('Amount must be a positive number')
+            throw new BadRequestError('Amount must be a positive number')
         }
 
         const updatedBudget = budget.update({

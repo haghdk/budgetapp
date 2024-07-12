@@ -20,11 +20,8 @@ class BudgetController {
             const budget = await BudgetService.getBudgetById(budgetId)
             res.json(budget)
         } catch (err) {
-            if (err instanceof NotFoundError) {
-                res.status(err.statusCode).json({ error: err.message })
-            } else {
-                res.status(500).json({ error: err.message })
-            }
+            const statusCode = err.statusCode != null ? err.statusCode : 500
+            res.status(statusCode).json({ error: err.message })
         }
     }
 

@@ -1,4 +1,5 @@
 const { Category } = require('../models')
+const { NotFoundError } = require('../errors/errors')
 
 class CategoryService {
     async addCategory(name, color) {
@@ -12,7 +13,7 @@ class CategoryService {
     async listAllCategories() {
         const categories = await Category.findAll()
         if (categories === null) {
-            throw new Error('No categories found')
+            throw new Error('Error finding categories')
         } 
         return categories
     }
@@ -20,7 +21,7 @@ class CategoryService {
     async editCategory(name, color, categoryId) {
         const category = await Category.findByPk(categoryId)
         if (!category) {
-            throw new Error(`Category with id ${categoryId} not found`)
+            throw new NotFoundError(`Category with id ${categoryId} not found`)
         }
 
         const updatedCategory = category.update({
