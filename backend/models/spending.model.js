@@ -1,4 +1,4 @@
-const { typeConstants } = require('../constants/types')
+const SpendingTypes = require('../constants/types')
 
 const SpendingModel = (sequelize, DataTypes) => {
     const Spending = sequelize.define('Spending', {
@@ -16,7 +16,7 @@ const SpendingModel = (sequelize, DataTypes) => {
             allowNull: false
         },
         type: {
-            type: DataTypes.ENUM(Object.values(typeConstants)),
+            type: DataTypes.ENUM(Object.values(SpendingTypes.types)),
             allowNull: false
         },
         date: {
@@ -29,7 +29,11 @@ const SpendingModel = (sequelize, DataTypes) => {
         },
         categoryId: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
+            references: {
+                model: 'Categories',
+                key: 'id'
+            }
         }
     })
     return Spending
