@@ -1,7 +1,7 @@
-const { typeConstants } = require('../constants/types')
+const SpendingTypes = require('../constants/types')
 
 const SpendingModel = (sequelize, DataTypes) => {
-    const Spending = sequelize.define('Category', {
+    const Spending = sequelize.define('Spending', {
         id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -16,8 +16,12 @@ const SpendingModel = (sequelize, DataTypes) => {
             allowNull: false
         },
         type: {
-            type: DataTypes.ENUM(Object.values(typeConstants)),
+            type: DataTypes.ENUM(Object.values(SpendingTypes.types)),
             allowNull: false
+        },
+        date: {
+          type: DataTypes.DATE,
+          allowNull: false,
         },
         budgetId: {
             type: DataTypes.INTEGER,
@@ -25,7 +29,11 @@ const SpendingModel = (sequelize, DataTypes) => {
         },
         categoryId: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
+            references: {
+                model: 'Categories',
+                key: 'id'
+            }
         }
     })
     return Spending

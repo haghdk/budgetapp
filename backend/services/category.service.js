@@ -1,4 +1,5 @@
-const { Category } = require('../models')
+const { Category, Spending } = require('../models')
+const { NotFoundError, ConflictError } = require('../errors/errors')
 
 class CategoryService {
     async addCategory(name, color) {
@@ -10,9 +11,9 @@ class CategoryService {
     }
 
     async listAllCategories() {
-        const categories = await Category.findAll()
+        const categories = await Category.findAll({attributes: ['id', 'name', 'color']})
         if (categories === null) {
-            throw new Error('No categories found')
+            throw new Error('Error finding categories')
         } 
         return categories
     }
@@ -20,7 +21,7 @@ class CategoryService {
     async editCategory(name, color, categoryId) {
         const category = await Category.findByPk(categoryId)
         if (!category) {
-            throw new Error(`Category with id ${categoryId} not found`)
+            throw new NotFoundError(`Category with id ${categoryId} not found`)
         }
 
         const updatedCategory = category.update({
@@ -31,6 +32,20 @@ class CategoryService {
             where: { id: categoryId }
         })
         return updatedCategory
+    }
+    
+    async deleteCategory(categoryId) {
+        const category = await Category.findByPk(categoryId)
+        if (!category) {
+            throw new NotFoundError(`Category with id ${categoryId} not found`)
+        }
+
+        const spendings = await Spending.findAll({ where: { categoryId } })
+        if (spendings.length > 0) {
+            throw new ConflictError('Cannot delete category with associated spendings')
+        }
+
+        return await Category.destroy({ where: { id: categoryId } })
     }
 }
 

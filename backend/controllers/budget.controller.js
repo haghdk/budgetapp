@@ -1,6 +1,5 @@
 const BudgetService = require('../services/budget.service')
-const { NotFoundError, BadRequestError } = require('../errors/errors')
-
+const StatusCode = require('../utils/util.statuscode')
 
 class BudgetController {
     async addBudget(req, res) {
@@ -8,9 +7,8 @@ class BudgetController {
         try {
             const budget = await BudgetService.addBudget(title, amount, startDate, endDate)
             res.json(budget)
-        } catch (err) {
-            const statusCode = err.statusCode != null ? err.statusCode : 500
-            res.status(statusCode).json({ error: err.message })         
+        } catch (error) {
+            res.status(StatusCode.statusCodeFromErrorType(error)).json({ error: error.message })        
         }
     }
 
@@ -19,12 +17,8 @@ class BudgetController {
         try {
             const budget = await BudgetService.getBudgetById(budgetId)
             res.json(budget)
-        } catch (err) {
-            if (err instanceof NotFoundError) {
-                res.status(err.statusCode).json({ error: err.message })
-            } else {
-                res.status(500).json({ error: err.message })
-            }
+        } catch (error) {
+            res.status(StatusCode.statusCodeFromErrorType(error)).json({ error: error.message })
         }
     }
 
@@ -32,8 +26,8 @@ class BudgetController {
         try {
             const budgets = await BudgetService.allBudgets()
             res.json(budgets)
-        } catch (err) {
-            res.status(500).json({ error: err.message })
+        } catch (error) {
+            res.status(StatusCode.statusCodeFromErrorType(error)).json({ error: error.message })
         }
     }
 }
