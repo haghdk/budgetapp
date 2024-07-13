@@ -1,5 +1,5 @@
-const { Category } = require('../models')
-const { NotFoundError } = require('../errors/errors')
+const { Category, Spending } = require('../models')
+const { NotFoundError, ConflictError } = require('../errors/errors')
 
 class CategoryService {
     async addCategory(name, color) {
@@ -32,6 +32,20 @@ class CategoryService {
             where: { id: categoryId }
         })
         return updatedCategory
+    }
+    
+    async deleteCategory(categoryId) {
+        const category = await Category.findByPk(categoryId)
+        if (!category) {
+            throw new NotFoundError(`Category with id ${categoryId} not found`)
+        }
+
+        const spendings = await Spending.findAll({ where: { categoryId } })
+        if (spendings.length > 0) {
+            throw new ConflictError('Cannot delete category with associated spendings')
+        }
+
+        return await Category.destroy({ where: { id: categoryId } })
     }
 }
 
