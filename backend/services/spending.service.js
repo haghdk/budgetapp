@@ -1,5 +1,5 @@
 const { Spending, Budget, Category } = require('../models')
-const { typeConstants, formatValidTypesString } = require('../constants/types')
+const SpendingTypes = require('../constants/types')
 const { NotFoundError, BadRequestError } = require('../errors/errors');
 const sequelize = require('../config/database');
 
@@ -14,8 +14,8 @@ class SpendingService {
      * @returns {Promise<Spending>}
      */
     async addSpending(description, amount, type, date, budgetId, categoryId) {
-        if (!Object.values(typeConstants).includes(type)) {
-            const validTypesString = formatValidTypesString(Object.values(typeConstants));
+        if (!Object.values(SpendingTypes.types).includes(type)) {
+            const validTypesString = SpendingTypes.formatValidTypesString();
             throw new BadRequestError(`Invalid type. Must be either ${validTypesString}`);
         }
 
@@ -61,7 +61,15 @@ class SpendingService {
             where: { budgetId }
         })
 
-        return spendings;
+        const totalAmount = await Spending.sum('amount', {
+            where: { budgetId }
+        })
+
+        return {
+            count: spendings.count,
+            rows: spendings.rows,
+            totalAmount: totalAmount || 0
+        };
     }
     
     /**
@@ -82,7 +90,7 @@ class SpendingService {
      * @param {*} amount Amount of the spending
      * @param {*} type Type of the spending
      * @param {*} spendingId Id of the spending
-     * @returns 
+     * @returns updated spending item
      */
     async editSpending(description, amount, type, spendingId, categoryId) {
         const spending = await Spending.findByPk(spendingId)
@@ -94,11 +102,10 @@ class SpendingService {
             throw new BadRequestError(`Amount must be a number in float format. You send "${typeof amount}"`)
         }
 
-        if (!Object.values(typeConstants).includes(type)) {
-            const validTypesString = formatValidTypesString(Object.values(typeConstants));
+        if (!Object.values(SpendingTypes.types).includes(type)) {
+            const validTypesString = SpendingTypes.formatValidTypesString();
             throw new BadRequestError(`Invalid type. Must be either ${validTypesString}`);
         }
-
         
         const updatedSpending = await spending.update({
             description,
@@ -111,27 +118,6 @@ class SpendingService {
         })
 
         return updatedSpending
-    }
-
-    async totalSpending(budgetId) {
-        const budget = await Budget.findByPk(budgetId)
-
-        if (!budget) {
-            throw new NotFoundError(`Budget with id ${budgetId} not found`)
-        }
-
-        const totalSum = await Spending.findAll({
-            where: {
-                budgetId
-            },
-            attributes: [
-                'budgetId',
-                [sequelize.fn('sum', sequelize.col('amount')), 'total_amount']
-            ],
-            group: ['budgetId']            
-        })
-
-        return totalSum
     }
 }
 
