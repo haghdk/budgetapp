@@ -41,16 +41,6 @@ class SpendingController {
             res.status(StatusCode.statusCodeFromErrorType(error)).json({ error: error.message })
         }
     }
-
-    async totalSpending(req, res) {
-        const { budgetId } = req.params
-        try {
-            const totalAmount = await SpendingService.totalSpending(budgetId)
-            res.json(totalAmount)
-        } catch (error) {
-            res.status(StatusCode.statusCodeFromErrorType(error)).json({ error: error.message })
-        }
-    }
 }
 
 module.exports = new SpendingController()
