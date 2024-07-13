@@ -1,17 +1,21 @@
-const typeConstants = Object.freeze({
-    NECESSARY: 'necessary',
-    LUXURY: 'luxury'
-})
+class SpendingTypes {
+    types = {}
 
-const formatValidTypesString = (typesArray) => {
-    if (typesArray.length === 1) {
-        return typesArray[0];
+    constructor() {
+        this.types = Object.freeze({
+            NECESSARY: 'necessary',
+            LUXURY: 'luxury'
+        })
     }
-    const lastType = typesArray.pop();
-    return `"${typesArray.join(', ')}" or "${lastType}"`;
+      
+    formatValidTypesString = () => {
+        const typesArray = Object.values(this.types)
+        if (typesArray.length === 1) {
+            return typesArray[0];
+        }
+        const lastType = typesArray.pop();
+        return `"${typesArray.join(', ')}" or "${lastType}"`;
+    }
 }
 
-module.exports = {
-    typeConstants,
-    formatValidTypesString
-}
+module.exports = new SpendingTypes()
