@@ -1,7 +1,7 @@
 const { Spending, Budget, Category } = require('../models')
 const SpendingTypes = require('../constants/types')
 const { NotFoundError, BadRequestError } = require('../errors/errors');
-const sequelize = require('../config/database');
+const { Op } = require('sequelize')
 
 class SpendingService {
     /**
@@ -47,22 +47,45 @@ class SpendingService {
     }
 
     /**
-     * Returns all spendings in a budget'
+     * Returns all spendings in a budget
      * @param {number} budgetId
+     * @returns {Promise<Object>}
      **/
-    async listSpendingsInBudget(budgetId) {        
+    async listSpendingsInBudget(budgetId, description, startDate, endDate) {        
         const budget = await Budget.findByPk(budgetId)
 
         if (!budget) {
             throw new NotFoundError(`Budget with id ${budgetId} not found`)
         }
 
+        const whereClause = { budgetId }
+
+        if (description) {
+            whereClause.description = {
+                [Op.like]: `%¢${description}%`
+            }
+        }
+
+        if (startDate && endDate) {
+            whereClause.date = {
+                [Op.between]: [startDate, endDate]
+            }
+        } else if (startDate) {
+            whereClause.date = {
+                [Op.gte]: startDate
+            }
+        } else if (endDate) {
+            whereClause.date = {
+                [Op.lte]: endDate
+            }
+        }
+    
         const spendings = await Spending.findAndCountAll({
-            where: { budgetId }
+            where: whereClause
         })
 
         const totalAmount = await Spending.sum('amount', {
-            where: { budgetId }
+            where: whereClause  
         })
 
         return {
