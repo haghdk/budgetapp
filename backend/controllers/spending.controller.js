@@ -14,8 +14,14 @@ class SpendingController {
 
     async listSpendingsInBudget(req, res) {
         const { budgetId } = req.params
+        const { description, startDate, endDate } = req.query
         try {
-            const spendings = await SpendingService.listSpendingsInBudget(budgetId)
+            const spendings = await SpendingService.listSpendingsInBudget(
+                budgetId,
+                description,
+                startDate ? new Date(startDate) : null,
+                endDate ? new Date(endDate) : null
+            )
             res.json(spendings)
         } catch (error) {
             res.status(StatusCode.statusCodeFromErrorType(error)).json({ error: error.message })
