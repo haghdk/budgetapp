@@ -44,7 +44,7 @@ class BudgetService {
      * @returns {Promise<Object>} A promise that resolves to the budget object if found.
      */
     async getBudgetById(budgetId) {
-        const budget = await Budget.findByPk(parseInt(budgetId))
+        const budget = await Budget.findByPk(budgetId)
         if (!budget) {
             throw new NotFoundError(`Budget with id ${budgetId} not found`)
         }
