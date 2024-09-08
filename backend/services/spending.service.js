@@ -62,7 +62,7 @@ class SpendingService {
 
         if (description) {
             whereClause.description = {
-                [Op.like]: `%${description}%`
+                [Op.iLike]: `%${description}%`
             }
         }
 
