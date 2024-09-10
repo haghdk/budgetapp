@@ -21,8 +21,20 @@ class BudgetService {
      * @returns {Promise<Object>} A promise that resolves to the newly created budget object.
      */
     async addBudget(title, amount, startDate, endDate) {
-        if (isNaN(amount)) {
-            throw new BadRequestError(`Amount must be a number in integer format. You send "${typeof amount}"`)
+        if (isNaN(amount) && amount.toString().indexOf('.') === -1) {
+            throw new BadRequestError(`Amount must be a number in float format. You send "${typeof amount}"`)
+        }
+
+        if (amount < 0) {
+            throw new BadRequestError('Amount must be a zero or a positive number')
+        }
+
+        if (title === null || title === "") {
+            throw new BadRequestError('Title cannot be empty')
+        }
+
+        if (startDate === null || endDate === null) {
+            throw new BadRequestError('Invalid date')
         }
 
         const budget = await Budget.create({
@@ -78,7 +90,7 @@ class BudgetService {
      * @throws {BadRequestError} If the amount is not a valid float or if it is a negative number.
      * @returns {Promise<Object>} The updated budget object.
      */
-    async editBudget(budgetId, amount, startDate, endDate) {
+    async editBudget(budgetId, title, amount, startDate, endDate) {
         const budget = await Budget.findByPk(budgetId)
         if (!budget) {
             throw new NotFoundError(`Budget with id ${budgetId} not found`)
@@ -92,8 +104,13 @@ class BudgetService {
             throw new BadRequestError('Amount must be a zero or a positive number')
         }
 
+        if (title === null || title === "") {
+            throw new BadRequestError('Title cannot be empty')
+        }
+
         const updatedBudget = budget.update({
             amount,
+            title,
             startDate,
             endDate
         }, {
