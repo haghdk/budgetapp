@@ -12,6 +12,16 @@ app.use(`/api/${VERSION}/budget`, budgetRoutes)
 app.use(`/api/${VERSION}/spending`, spendingRoutes)
 app.use(`/api/${VERSION}/category`, categoryRoutes)
 
+app.use((err, req, res, next) => {
+    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+        return res.status(400).json({
+            error: 'Invalid JSON format',
+            message: 'Please make sure your JSON payload is correct.'
+        })
+    }
+    next()
+})
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
 })
