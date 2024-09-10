@@ -30,6 +30,16 @@ class BudgetController {
             res.status(StatusCode.statusCodeFromErrorType(error)).json({ error: error.message })
         }
     }
+
+    async editBudget(req, res) {
+        const { budgetId, title, amount, startDate, endDate } = req.body
+        try {
+            const budget = await BudgetService.editBudget(budgetId, title, amount, startDate, endDate)
+            res.json(budget)
+        } catch (error) {
+            res.status(StatusCode.statusCodeFromErrorType(error)).json({ error: error.message })
+        }
+    }
 }
 
 module.exports = new BudgetController()
