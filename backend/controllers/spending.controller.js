@@ -47,6 +47,20 @@ class SpendingController {
             res.status(StatusCode.statusCodeFromErrorType(error)).json({ error: error.message })
         }
     }
+
+    async deleteSpending(req, res) {
+        const { spendingId } = req.params
+        try {
+            const deletedSpending = await SpendingService.deleteSpending(spendingId)
+            if (deletedSpending) {
+                res.json({ message: 'Spending deleted' })
+            } else {
+                res.status(500).json({ message: 'Spending was not deleted for some unexpected reason' })
+            }
+        } catch(error) {
+            res.status(StatusCode.statusCodeFromErrorType(error)).json({ error: error.message }) 
+        }
+    }
 }
 
 module.exports = new SpendingController()
