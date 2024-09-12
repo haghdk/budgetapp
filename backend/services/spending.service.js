@@ -175,6 +175,14 @@ class SpendingService {
 
         return updatedSpending
     }
+
+    async deleteSpending(spendingId) {
+        const spending = await Spending.findByPk(spendingId)
+        if (!spending) {
+            throw new NotFoundError(`Spending with id ${spendingId} not found`)
+        }
+        return await Spending.destroy({ where: { id: spendingId } })
+    }
 }
 
 module.exports = new SpendingService()
