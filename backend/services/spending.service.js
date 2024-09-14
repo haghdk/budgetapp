@@ -1,11 +1,11 @@
-const { Spending, Budget, Category } = require('../models')
-const SpendingTypes = require('../constants/types')
-const { NotFoundError, BadRequestError } = require('../errors/errors');
-const { Op } = require('sequelize')
+const { Spending, Budget, Category } = require("../models");
+const SpendingTypes = require("../constants/types");
+const { NotFoundError, BadRequestError } = require("../errors/errors");
+const { Op } = require("sequelize");
 
 /**
  * Service class for managing spending-related operations.
- * 
+ *
  * The `SpendingService` class provides methods to create, retrieve, update, and manage spendings
  * in the system. It interacts with the underlying database models to perform CRUD operations for
  * spendings, including filtering and validating input.
@@ -13,7 +13,7 @@ const { Op } = require('sequelize')
 class SpendingService {
     /**
      * Adds a new spending entry associated with a specific budget and category.
-     * 
+     *
      * @async
      * @param {string} description - A brief description of the spending.
      * @param {number} amount - The amount of the spending in float format.
@@ -31,19 +31,19 @@ class SpendingService {
             throw new BadRequestError(`Invalid type. Must be either ${validTypesString}`);
         }
 
-        if (isNaN(amount) && amount.toString().indexOf('.') === -1) {
-            throw new BadRequestError(`Amount must be a number in float format. You send "${typeof amount}"`)
+        if (isNaN(amount) && amount.toString().indexOf(".") === -1) {
+            throw new BadRequestError(`Amount must be a number in float format. You send "${typeof amount}"`);
         }
 
-        const budget = await Budget.findByPk(budgetId)
-        const category = await Category.findByPk(categoryId)
+        const budget = await Budget.findByPk(budgetId);
+        const category = await Category.findByPk(categoryId);
 
         if (!budget) {
-            throw new NotFoundError(`Budget with id ${budgetId} not found`)
+            throw new NotFoundError(`Budget with id ${budgetId} not found`);
         }
 
         if (!category) {
-            throw new NotFoundError(`Category with id ${categoryId} not found`)
+            throw new NotFoundError(`Category with id ${categoryId} not found`);
         }
 
         const spending = Spending.create({
@@ -52,15 +52,15 @@ class SpendingService {
             type,
             date,
             budgetId,
-            categoryId
-        })
+            categoryId,
+        });
 
-        return spending
+        return spending;
     }
 
     /**
      * Retrieves a list of spendings for a specified budget, with optional filtering by description and date range.
-     * 
+     *
      * @async
      * @param {number} budgetId - The ID of the budget for which to retrieve spendings.
      * @param {string} [description] - Optional description to filter spendings by (case-insensitive, partial match).
@@ -73,70 +73,70 @@ class SpendingService {
      * - `totalAmount` {number}: The sum of the amounts of the spendings.
      */
     async listSpendingsInBudget(budgetId, description, startDate, endDate) {
-        const budget = await Budget.findByPk(budgetId)
+        const budget = await Budget.findByPk(budgetId);
 
         if (!budget) {
-            throw new NotFoundError(`Budget with id ${budgetId} not found`)
+            throw new NotFoundError(`Budget with id ${budgetId} not found`);
         }
 
         const whereClause = {
-            budgetId
-        }
+            budgetId,
+        };
 
         if (description) {
             whereClause.description = {
-                [Op.iLike]: `%${description}%`
-            }
+                [Op.iLike]: `%${description}%`,
+            };
         }
 
         if (startDate && endDate) {
             whereClause.date = {
-                [Op.between]: [startDate, endDate]
-            }
+                [Op.between]: [startDate, endDate],
+            };
         } else if (startDate) {
             whereClause.date = {
-                [Op.gte]: startDate
-            }
+                [Op.gte]: startDate,
+            };
         } else if (endDate) {
             whereClause.date = {
-                [Op.lte]: endDate
-            }
+                [Op.lte]: endDate,
+            };
         }
 
         const spendings = await Spending.findAndCountAll({
-            where: whereClause
-        })
+            where: whereClause,
+        });
 
-        const totalAmount = await Spending.sum('amount', {
-            where: whereClause
-        })
+        const totalAmount = await Spending.sum("amount", {
+            where: whereClause,
+        });
 
         return {
             count: spendings.count,
             rows: spendings.rows,
-            totalAmount: totalAmount || 0
+            totalAmount: totalAmount || 0,
         };
     }
 
     /**
      * Retrieves a spending record by its ID.
-     * 
+     *
      * @async
      * @param {number} spendingId - The ID of the spending to retrieve.
      * @throws {NotFoundError} If the spending with the specified ID is not found.
      * @returns {Promise<Object>} A promise that resolves to the spending object if found.
      */
     async getSpendingById(spendingId) {
-        const spending = await Spending.findByPk(spendingId)
+        const spending = await Spending.findByPk(spendingId);
         if (!spending) {
-            throw new NotFoundError(`Spending with id ${spendingId} not found`)
+            throw new NotFoundError(`Spending with id ${spendingId} not found`);
         }
-        return spending
+        return spending;
     }
 
     /**
      * Updates an existing spending record with the provided description, amount, type, and category ID.
-     * 
+     *
      * @async
      * @param {string} description - The updated description of the spending.
      * @param {number} amount - The updated amount for the spending, in float format.
@@ -148,13 +148,13 @@ class SpendingService {
      * @returns {Promise<Object>} A promise that resolves to the updated spending object.
      */
     async editSpending(description, amount, type, spendingId, categoryId) {
-        const spending = await Spending.findByPk(spendingId)
+        const spending = await Spending.findByPk(spendingId);
         if (!spending) {
-            throw new NotFoundError(`Spending with id ${spendingId} not found`)
+            throw new NotFoundError(`Spending with id ${spendingId} not found`);
         }
 
-        if (isNaN(amount) && amount.toString().indexOf('.') === -1) {
-            throw new BadRequestError(`Amount must be a number in float format. You send "${typeof amount}"`)
+        if (isNaN(amount) && amount.toString().indexOf(".") === -1) {
+            throw new BadRequestError(`Amount must be a number in float format. You send "${typeof amount}"`);
         }
 
         if (!Object.values(SpendingTypes.types).includes(type)) {
@@ -162,27 +162,30 @@ class SpendingService {
             throw new BadRequestError(`Invalid type. Must be either ${validTypesString}`);
         }
 
-        const updatedSpending = await spending.update({
-            description,
-            amount,
-            type,
-            categoryId
-        }, {
-            where: {
-                id: spendingId
+        const updatedSpending = await spending.update(
+            {
+                description,
+                amount,
+                type,
+                categoryId,
+            },
+            {
+                where: {
+                    id: spendingId,
+                },
             }
-        })
+        );
 
-        return updatedSpending
+        return updatedSpending;
     }
 
     async deleteSpending(spendingId) {
-        const spending = await Spending.findByPk(spendingId)
+        const spending = await Spending.findByPk(spendingId);
         if (!spending) {
-            throw new NotFoundError(`Spending with id ${spendingId} not found`)
+            throw new NotFoundError(`Spending with id ${spendingId} not found`);
         }
-        return await Spending.destroy({ where: { id: spendingId } })
+        return await Spending.destroy({ where: { id: spendingId } });
     }
 }
 
-module.exports = new SpendingService()
+module.exports = new SpendingService();

@@ -1,42 +1,42 @@
-const SpendingTypes = require('../constants/types')
+const SpendingTypes = require("../constants/types");
 
 const SpendingModel = (sequelize, DataTypes) => {
-    const Spending = sequelize.define('Spending', {
+    const Spending = sequelize.define("Spending", {
         id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
-            primaryKey: true
+            primaryKey: true,
         },
         description: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
         },
         amount: {
             type: DataTypes.FLOAT,
-            allowNull: false
+            allowNull: false,
         },
         type: {
             type: DataTypes.ENUM(Object.values(SpendingTypes.types)),
-            allowNull: false
+            allowNull: false,
         },
         date: {
-          type: DataTypes.DATE,
-          allowNull: false,
+            type: DataTypes.DATE,
+            allowNull: false,
         },
         budgetId: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
         },
         categoryId: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: 'Categories',
-                key: 'id'
-            }
-        }
-    })
-    return Spending
-} 
+                model: "Categories",
+                key: "id",
+            },
+        },
+    });
+    return Spending;
+};
 
-module.exports = SpendingModel
+module.exports = SpendingModel;
