@@ -1,29 +1,29 @@
 const BudgetModel = (sequelize, DataTypes) => {
-    const Budget = sequelize.define('Budget', {
+    const Budget = sequelize.define("Budget", {
         id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
-            primaryKey: true
+            primaryKey: true,
         },
         title: {
             type: DataTypes.STRING,
             allowNull: false,
-            defaultValue: 'null'
+            defaultValue: "null",
         },
         amount: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
         },
         startDate: {
             type: DataTypes.DATE,
-            allowNull: false
+            allowNull: false,
         },
         endDate: {
             type: DataTypes.DATE,
-            allowNull: false
-        }
-    })
-    return Budget
-} 
+            allowNull: false,
+        },
+    });
+    return Budget;
+};
 
-module.exports = BudgetModel
+module.exports = BudgetModel;

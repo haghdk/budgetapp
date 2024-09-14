@@ -1,5 +1,5 @@
-const NotFoundError = require('../errors/error.notfound')
-const BadRequestError = require('../errors/error.badrequest')
-const ConflictError = require('../errors/error.conflict')
+const NotFoundError = require("../errors/error.notfound");
+const BadRequestError = require("../errors/error.badrequest");
+const ConflictError = require("../errors/error.conflict");
 
-module.exports = { NotFoundError, BadRequestError, ConflictError }
+module.exports = { NotFoundError, BadRequestError, ConflictError };

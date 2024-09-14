@@ -1,22 +1,22 @@
 const IncomeModel = (sequelize, DataTypes) => {
-    const Income = sequelize.define('Income', {
+    const Income = sequelize.define("Income", {
         id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
-            primaryKey: true
+            primaryKey: true,
         },
         description: {
             type: DataTypes.STRING,
             allowNull: false,
-            defaultValue: 'null'
+            defaultValue: "null",
         },
         amount: {
             type: DataTypes.FLOAT,
-            allowNull: false
+            allowNull: false,
         },
         source: {
             type: DataTypes.STRING,
-            allowNull: true
+            allowNull: true,
         },
         date: {
             type: DataTypes.DATE,
@@ -24,10 +24,10 @@ const IncomeModel = (sequelize, DataTypes) => {
         },
         budgetId: {
             type: DataTypes.INTEGER,
-            allowNull: false
-        }
-    })
-    return Income
-}
+            allowNull: false,
+        },
+    });
+    return Income;
+};
 
-module.exports = IncomeModel
+module.exports = IncomeModel;
