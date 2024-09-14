@@ -19,8 +19,8 @@ class SpendingController {
             const spendings = await SpendingService.listSpendingsInBudget(
                 budgetId,
                 description,
-                startDate ? new Date(startDate) : null,
-                endDate ? new Date(endDate) : null
+                startDate ? new Date(startDate) : new Date(),
+                endDate ? new Date(endDate) : new Date()
             )
             res.json(spendings)
         } catch (error) {
