@@ -14,7 +14,6 @@ class IpRestrictionMiddleware {
         }
 
         const clientIp = requestIp.getClientIp(req);
-        console.log(`Request from IP: ${clientIp}`);
 
         const isAllowed = ipRangeCheck(clientIp, this.allowedIps);
 
