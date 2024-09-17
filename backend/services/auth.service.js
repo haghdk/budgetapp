@@ -1,4 +1,4 @@
-const jwt = require("../config/jwt");
+const jwt = require("../config/jwt.config");
 const ConflictError = require("../errors/error.conflict");
 const UnauthorizedError = require("../errors/error.unathorized");
 const { User } = require("../models/");

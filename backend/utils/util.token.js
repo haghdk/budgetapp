@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { secret, accessTokenExpiry, refreshTokenExpiry } = require("../config/jwt");
+const { secret, accessTokenExpiry, refreshTokenExpiry } = require("../config/jwt.config");
 
 class TokenUtils {
     generateAccessToken(user) {

@@ -1,5 +1,5 @@
 const Sequelize = require("sequelize");
-const sequelizeConfig = require("../config/database");
+const sequelizeConfig = require("../config/database.config");
 
 const Budget = require("./budget.model")(sequelizeConfig, Sequelize);
 const Spending = require("./spending.model")(sequelizeConfig, Sequelize);
