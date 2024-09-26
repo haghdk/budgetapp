@@ -3,7 +3,7 @@ const budgetRoutes = require("./routes/budget.routes");
 const spendingRoutes = require("./routes/spending.routes");
 const categoryRoutes = require("./routes/category.routes");
 const incomeRoutes = require("./routes/income.routes");
-const authRoutes = require("./routes/auth.routes");
+const userRoutes = require("./routes/user.routes");
 const VERSION = "v1";
 const PORT = process.env.PORT || 3000;
 
@@ -15,7 +15,7 @@ app.use(`/api/${VERSION}/budget`, budgetRoutes);
 app.use(`/api/${VERSION}/spending`, spendingRoutes);
 app.use(`/api/${VERSION}/category`, categoryRoutes);
 app.use(`/api/${VERSION}/income`, incomeRoutes);
-app.use(`/api/${VERSION}/auth`, authRoutes);
+app.use(`/api/${VERSION}/auth`, userRoutes);
 
 app.use((err, req, res, next) => {
     if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
