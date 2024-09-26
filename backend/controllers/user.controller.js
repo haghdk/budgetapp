@@ -12,7 +12,6 @@ class UserController {
         } catch (error) {
             res.status(StatusCode.statusCodeFromErrorType(error)).json({ error: error.message });
             Logger.error(`User registration failed with error: ${error}`)
-
         }
     }
 
@@ -21,8 +20,10 @@ class UserController {
         try {
             const { accessToken, refreshToken } = await UserService.login(username, password);
             res.json({ accessToken, refreshToken });
+            Logger.info(`User ${username} successfully logged in`)
         } catch (error) {
             res.status(StatusCode.statusCodeFromErrorType(error)).json({ error: error.message });
+            Logger.error(`User failed to login with error: ${error}`)
         }
     }
 
@@ -31,8 +32,10 @@ class UserController {
         try {
             const newAccessToken = await UserService.refresh(refreshToken);
             res.json({ accessToken: newAccessToken });
+            Logger.info(`Accesstoken generated`)
         } catch (error) {
             res.status(StatusCode.statusCodeFromErrorType(error)).json({ error: error.message });
+            Logger.error(`Refreshtoken failed to generate with error: ${error}`)
         }
     }
 }

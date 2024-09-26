@@ -3,15 +3,27 @@ const { secret, accessTokenExpiry, refreshTokenExpiry } = require("../config/jwt
 
 class TokenUtils {
     generateAccessToken(user) {
-        return jwt.sign({ id: user.id, username: user.username }, secret, { expiresIn: accessTokenExpiry });
+        try {
+            return jwt.sign({ id: user.id, username: user.username }, secret, { expiresIn: accessTokenExpiry });
+        } catch (error) {
+            console.log("Not good");
+        }
     }
 
     generateRefreshToken(user) {
-        return jwt.sign({ id: user.id, username: user.username }, secret, { expiresIn: refreshTokenExpiry });
+        try {
+            return jwt.sign({ id: user.id, username: user.username }, secret, { expiresIn: refreshTokenExpiry });
+        } catch (error) {
+            console.log("Not good");
+        }
     }
 
     verifyToken(token) {
-        return jwt.verify(token, secret);
+        try {
+            return jwt.verify(token, secret);
+        } catch (error) {
+            console.log("Not good" + error);
+        }
     }
 }
 
