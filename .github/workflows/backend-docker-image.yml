@@ -36,6 +36,12 @@ jobs:
       run: |
         git add version.txt
         git commit -m "Increment version to ${{ env.NEW_VERSION }}"
+
+    - name: Push changes
+      env:
+        PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+      run: |
+        git remote set-url origin https://x-access-token:${PAT_TOKEN}@github.com/haghdk/budgetapp.git
         git push
 
     - name: Build the Docker image
