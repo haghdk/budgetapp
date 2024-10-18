@@ -1,12 +1,12 @@
-FROM --platform=linux/arm64 arm64v8/node:16
+FROM --platform=linux/arm64 arm64v8/node:20
 
 WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-COPY ./ ./
+COPY . .
 
-RUN npm install
+RUN npm ci
 
 EXPOSE 3000
 
