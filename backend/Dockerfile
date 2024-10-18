@@ -1,5 +1,4 @@
-FROM --platform=linux/arm64 arm64v8/node:22.10.0-alpine3.20
-
+FROM --platform=linux/arm64 arm64v8/node:20.18
 WORKDIR /usr/src/app
 
 COPY package*.json ./
