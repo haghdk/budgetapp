@@ -1,4 +1,4 @@
-FROM arm64v8/node:20
+FROM 22.10.0-alpine3.20
 
 WORKDIR /usr/src/app
 
