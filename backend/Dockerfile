@@ -1,4 +1,4 @@
-FROM node:lts-slim
+FROM arm64v8/node:23-alpine
 
 WORKDIR /usr/src/app
 
