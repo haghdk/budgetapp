@@ -22,7 +22,7 @@ jobs:
 
     - name: Read the current version
       id: read_version
-      run: echo "VERSION=$(cat version.txt)" >> $GITHUB_ENV
+      run: echo "VERSION=$(cat version-backend.txt)" >> $GITHUB_ENV
 
     - name: Increment the version
       id: increment_version
@@ -33,11 +33,11 @@ jobs:
         echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
 
     - name: Save the new version
-      run: echo "${{ env.NEW_VERSION }}" > version.txt
+      run: echo "${{ env.NEW_VERSION }}" > version-backend.txt
 
     - name: Commit version change
       run: |
-        git add version.txt
+        git add version-backend.txt
         git commit -m "Increment version to ${{ env.NEW_VERSION }}"
 
     - name: Push changes
