@@ -1,4 +1,4 @@
-FROM arm64v8/node:22-slim
+FROM arm64v8/node:22.10
 
 WORKDIR /usr/src/app
 
