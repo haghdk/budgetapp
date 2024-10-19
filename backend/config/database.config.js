@@ -7,4 +7,11 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
     dialect: "postgres",
 });
 
+console.log("db connection start");
+console.log(process.env.DB_NAME);
+console.log(process.env.DB_USER);
+console.log(process.env.DB_PASS);
+console.log("db connection end");
+
+
 module.exports = sequelize;
