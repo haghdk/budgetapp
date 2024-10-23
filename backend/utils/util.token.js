@@ -23,7 +23,7 @@ class TokenUtils {
         try {
             return jwt.verify(token, secret);
         } catch (error) {
-            throw new TokenGenerationError("Failed to verify acccesstoken");
+            throw new TokenGenerationError("Failed to verify token");
         }
     }
 }
