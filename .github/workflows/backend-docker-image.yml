@@ -2,9 +2,13 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "master" ]
+    branches: 
+      - master
+      - development
   pull_request:
-    branches: [ "master" ]
+    branches: 
+      - master
+      - development
 
 jobs:
   build:
@@ -36,11 +40,13 @@ jobs:
       run: echo "${{ env.NEW_VERSION }}" > version-backend.txt
 
     - name: Commit version change
+      if: github.ref == 'refs/heads/master'
       run: |
         git add version-backend.txt
         git commit -m "Increment version to ${{ env.NEW_VERSION }}"
 
     - name: Push changes
+      if: github.ref == 'refs/heads/master'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
