@@ -1,16 +1,16 @@
-// const express = require("express");
+const express = require("express");
 // const budgetRoutes = require("./routes/budget.routes");
 // const spendingRoutes = require("./routes/spending.routes");
 // const categoryRoutes = require("./routes/category.routes");
 // const incomeRoutes = require("./routes/income.routes");
 // const userRoutes = require("./routes/user.routes");
-// const VERSION = "v1";
-// const PORT = process.env.PORT || 3000;
+const VERSION = "v1";
+const PORT = process.env.PORT || 3000;
 
-// const app = express();
+const app = express();
 // app.set('trust proxy', false);
-// app.use(express.urlencoded({ extended: true }));
-// app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 // app.use(`/api/${VERSION}/budget`, budgetRoutes);
 // app.use(`/api/${VERSION}/spending`, spendingRoutes);
 // app.use(`/api/${VERSION}/category`, categoryRoutes);
@@ -27,8 +27,6 @@
 //     next();
 // });
 
-// app.listen(PORT, () => {
-//     console.log(`Server is running on port ${PORT}`);
-// });
-
-console.log("start")
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
