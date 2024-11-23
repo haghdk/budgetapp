@@ -11,20 +11,24 @@ class IpRestrictionMiddleware {
 
     restrictByIp = (req, res, next) => {
         const clientIp = requestIp.getClientIp(req);
-        const isAllowed = ipRangeCheck(clientIp, this.allowedIps);
 
-        if (!this.isEnabled) {
-            Logger.info(`No ip restriction in effect. ${clientIp} had access to register endpoint. Are you sure this is intended?`);
-            return next();
+        if (clientIp) {
+            const isAllowed = ipRangeCheck(clientIp, this.allowedIps);
+
+            if (!this.isEnabled) {
+                Logger.info(`No ip restriction in effect. ${clientIp} had access to register endpoint. Are you sure this is intended?`);
+                return next();
+            }
+    
+            if (isAllowed) {
+                Logger.info(`No ip restriction in effect. ${clientIp} can register.`);
+                return next();
+            } else {
+                Logger.info(`User with ${clientIp} denied access because of ip restriction`);
+                return res.status(403).json({ error: "Access denied. IP is not allowed." });
+            }
         }
 
-        if (isAllowed) {
-            Logger.info(`No ip restriction in effect. ${clientIp} can register.`);
-            return next();
-        } else {
-            Logger.info(`User with ${clientIp} denied access because of ip restriction`);
-            return res.status(403).json({ error: "Access denied. IP is not allowed." });
-        }
     };
 }
 
